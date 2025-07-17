@@ -1,0 +1,32 @@
+# Terraform state and crash logs
+*.tfstate
+*.tfstate.backup
+crash.log
+
+# Terraform plan files
+*.tfplan
+
+# Sensitive variable and key files
+*.tfvars
+*.pem
+
+# Terraform working directory
+.terraform/
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform lock file (optional – ignore only if you don’t want to track versions)
+#.terraform.lock.hcl
+
+# System files
+.DS_Store
+Thumbs.db
+*.pem
+provider.tf
+
+terraform_user_accessKeys.csv
+*.csv
