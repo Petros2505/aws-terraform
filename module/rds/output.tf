@@ -7,3 +7,6 @@ output "db_username" {
 output "db_password" {
   value = var.db_password
 }
+output "rds_endpoint" {
+  value = aws_db_instance.rds.endpoint
+}

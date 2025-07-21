@@ -1,24 +1,24 @@
 variable "tags" {
-  type        = map(string)
-  default     = {}
+  type    = map(string)
+  default = {}
 }
 variable "aws_ecs_cluster" {
-  type = string
+  type    = string
   default = "ecs-cluster"
 }
 variable "ecs_instance_ami" {
-    type = string
+  type    = string
   default = "ami-0d1ff537c292bb272"
 }
 variable "ecs_instance_instance_type" {
-    type = string
+  type    = string
   default = "t2.micro"
 }
 variable "ecs_instance_subnet_id" {
-    type = list(string)
+  type = list(string)
 }
 variable "ecs_instances" {
-  type = string
+  type    = string
   default = "ecs-instances"
 }
 
@@ -48,19 +48,19 @@ variable "vpc_id" {
   type        = string
 }
 variable "ecs_autoscaling_group" {
-  type = string
+  type    = string
   default = "ecs-asg"
 }
 variable "ecs_launch_template" {
-  type = string
+  type    = string
   default = "ecs"
 }
 variable "ecs_instance_sg" {
-  type = string
+  type    = string
   default = "ecs_instance_sg"
 }
 variable "ecs_instance_name" {
-  type = string
+  type    = string
   default = "ecs-instance"
 }
 
@@ -78,4 +78,8 @@ variable "DB_HOST" {
 }
 variable "target_group_arn" {
   type = string
+}
+variable "ecs_instance_role" {
+  type = string
+  default = "ecs_user_role"
 }

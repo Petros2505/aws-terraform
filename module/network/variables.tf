@@ -1,6 +1,6 @@
 variable "tags" {
-  type        = map(string)
-  default     = {}
+  type    = map(string)
+  default = {}
 }
 
 variable "vpc_name" {
@@ -32,15 +32,27 @@ variable "private_subnet_name" {
   default = "private_subnet"
 }
 
-variable "private_subnet_cidr" {
-  type    = list(string)
-  default = ["10.0.2.0/24", "10.0.3.0/24"]
-}
 
 variable "private_subnet_availability_zone" {
   type    = list(string)
   default = ["eu-west-3a", "eu-west-3b"]
 }
+
+variable "private_subnet_cidr" {
+  type = map(object({
+    cidr_block = string
+  }))
+  default = {
+    "1" = {
+      cidr_block = "10.0.2.0/24"
+    }
+    "2" = {
+      cidr_block = "10.0.3.0/24"
+    }
+  }
+}
+
+
 variable "internet_gateway" {
   type    = string
   default = "main-igw"

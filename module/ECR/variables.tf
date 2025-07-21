@@ -1,8 +1,8 @@
 variable "tags" {
-  type        = map(string)
-  default     = {}
+  type    = map(string)
+  default = {}
 }
 variable "ecr_repository" {
-  type = string
+  type    = string
   default = "ecr-repo"
 }

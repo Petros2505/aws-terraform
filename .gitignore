@@ -20,7 +20,7 @@ override.tf.json
 *_override.tf.json
 
 # Terraform lock file (optional – ignore only if you don’t want to track versions)
-#.terraform.lock.hcl
+.terraform.lock.hcl
 
 # System files
 .DS_Store
