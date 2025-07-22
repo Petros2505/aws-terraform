@@ -38,10 +38,10 @@ module "ecs" {
   target_group_arn                    = "${module.alb.target_group_arn}"
   ecs_instance_name                   = "${local.workspace.environment}-${local.project_name}-ecs-instance"
   vpc_id                              = "${module.vpc.vpc_id}"
-  db_name                             = "${local.workspace.db_nam}"
-  db_username                         = "${local.workspace.db_use}"
-  db_password                         = "${local.workspace.db_pas}"
-  DB_HOST                             = "${module.rds.rds_endpoin}"
+  db_name                             = "${local.workspace.db_name}"
+  db_username                         = "${local.workspace.db_username}"
+  db_password                         = "${local.workspace.db_password}"
+  DB_HOST                             = "${module.rds.rds_endpoint}"
   ecs_instance_sg_egress              = "${local.workspace.ecs_instance_sg_egress}"
   ecs_instance_sg_ingress             = "${local.workspace.ecs_instance_sg_ingress}"
 
@@ -59,6 +59,8 @@ module "rds" {
   rds_db_instance_engine            = "${local.workspace.rds_db_instance_engine}"
   rds_db_instance_instance_class    = "${local.workspace.rds_db_instance_instance_class}"
   rds_db_instance_allocated_storage = "${local.workspace.rds_db_instance_allocated_storage}"
+  rds_sg_egress                     = "${local.workspace.rds_sg_egress}"
+  rds_sg_ingress                    = "${local.workspace.rds_sg_ingress}"
 }
 
 module "s3" {
@@ -82,4 +84,9 @@ module "alb" {
   aws_lb              = "${local.workspace.environment}-${local.project_name}-ecs-alb"
   aws_lb_target_group = "${local.workspace.environment}-${local.project_name}-ecs-alb-tg"
   alb-sg              = "${local.workspace.environment}-${local.project_name}-alb-sg"
+  alb_health_check    = "${local.workspace.alb_health_check}"
+  alb_sg_ingress      = "${local.workspace.alb_sg_ingress}"
+  alb_sg_egress       = "${local.workspace.alb_sg_egress}"
+
 }
+

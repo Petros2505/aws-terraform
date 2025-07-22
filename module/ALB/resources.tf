@@ -17,16 +17,19 @@ resource "aws_lb_target_group" "ecs_tg" {
   protocol = "HTTP"
   vpc_id   = var.vpc_id
 
-  health_check {
-    enabled             = true
-    healthy_threshold   = 2
-    unhealthy_threshold = 2
-    timeout             = 5
-    interval            = 30
-    path                = "/"
-    matcher             = "200"
-    port                = 80
-    protocol            = "HTTP"
+  dynamic "health_check" {
+    for_each = var.alb_health_check
+    content {
+      enabled             = health_check.value.enabled
+      healthy_threshold   = health_check.value.healthy_threshold
+      unhealthy_threshold = health_check.value.unhealthy_threshold
+      timeout             = health_check.value.timeout
+      interval            = health_check.value.interval
+      path                = health_check.value.path
+      matcher             = health_check.value.matcher
+      port                = health_check.value.port
+      protocol            = health_check.value.protocol
+    }
   }
 
   tags = merge(var.tags, {
@@ -49,24 +52,24 @@ resource "aws_security_group" "alb-sg" {
   name   = var.alb-sg
   vpc_id = var.vpc_id
 
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = var.alb_sg_ingress
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
   }
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "egress" {
+    for_each = var.alb_sg_egress
+    content {
+      from_port   = egress.value.from_port
+      to_port     = egress.value.to_port
+      protocol    = egress.value.protocol
+      cidr_blocks = egress.value.cidr_blocks
+    }
   }
   tags = merge(var.tags, {
     name = var.alb-sg

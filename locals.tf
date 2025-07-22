@@ -68,6 +68,61 @@ locals {
           cidr_blocks = ["0.0.0.0/0"]
         }
       ]
+      rds_sg_egress = [
+        {
+          from_port   = 0
+          to_port     = 0
+          protocol    = "-1"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
+      ]
+      rds_sg_ingress = [
+        {
+          from_port   = 22
+          to_port     = 22
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        },
+        {
+          from_port   = 3306
+          to_port     = 3306
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
+      ]
+      alb_health_check = [
+        {
+          enabled             = true
+          healthy_threshold   = 2
+          unhealthy_threshold = 2
+          timeout             = 5
+          interval            = 30
+          path                = "/"
+          matcher             = "200"
+          port                = 80
+          protocol            = "HTTP"
+        }
+      ]
+      alb_sg_ingress = [
+        {
+          from_port   = 80
+          to_port     = 80
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        },
+        {
+          from_port   = 443
+          to_port     = 443
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
+      ]
+      alb_sg_egress = [{
+        from_port   = 0
+        to_port     = 0
+        protocol    = "-1"
+        cidr_blocks = ["0.0.0.0/0"]
+      }]
     }
   }
   environment_vars = contains(keys(local.env), terraform.workspace) ? terraform.workspace : "default"
