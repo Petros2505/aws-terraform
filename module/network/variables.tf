@@ -39,17 +39,8 @@ variable "private_subnet_availability_zone" {
 }
 
 variable "private_subnet_cidr" {
-  type = map(object({
-    cidr_block = string
-  }))
-  default = {
-    "1" = {
-      cidr_block = "10.0.2.0/24"
-    }
-    "2" = {
-      cidr_block = "10.0.3.0/24"
-    }
-  }
+  type    = list(string)
+  default = ["10.0.2.0/24", "10.0.3.0/24"]
 }
 
 

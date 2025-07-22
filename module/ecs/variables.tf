@@ -83,3 +83,25 @@ variable "ecs_instance_role" {
   type = string
   default = "ecs_user_role"
 }
+variable "ecs_instance_profile" {
+  type = string
+  default = "ecs_user"
+}
+
+variable "ecs_instance_sg_ingress" {
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string) 
+  }))
+}
+
+variable "ecs_instance_sg_egress" {
+  type = list(object({
+    from_port   = number
+    to_port     = number
+    protocol    = string
+    cidr_blocks = list(string) 
+  }))
+}

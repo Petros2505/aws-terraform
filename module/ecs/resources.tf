@@ -16,7 +16,7 @@ resource "aws_iam_role" "ecs_instance_role" {
 }
 
 resource "aws_iam_instance_profile" "ecs_instance_profile" {
-  name = "ecs_user"
+  name = var.ecs_instance_profile
   role = aws_iam_role.ecs_instance_role.name
   tags = merge(var.tags, {
 
@@ -39,37 +39,24 @@ resource "aws_security_group" "ecs_instance_sg" {
   name   = var.ecs_instance_sg
   vpc_id = var.vpc_id
 
-  ingress {
-    from_port   = 3306
-    to_port     = 3306
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 80
-    to_port     = 80
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-  ingress {
-    from_port   = 443
-    to_port     = 443
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "ingress" {
+    for_each = var.ecs_instance_sg_ingress
+    content {
+      from_port   = ingress.value.from_port
+      to_port     = ingress.value.to_port
+      protocol    = ingress.value.protocol
+      cidr_blocks = ingress.value.cidr_blocks
+    }
   }
 
-  ingress {
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
-
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
+  dynamic "egress" {
+    for_each = var.ecs_instance_sg_egress
+    content {
+      from_port   = egress.value.from_port
+      to_port     = egress.value.to_port
+      protocol    = egress.value.protocol
+      cidr_blocks = egress.value.cidr_blocks
+    }
   }
   tags = merge(var.tags, {
     name = var.ecs_instance_sg

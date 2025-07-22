@@ -1,5 +1,6 @@
 locals {
-  region = "eu-west-3"
+  region       = "eu-west-3"
+  project_name = "zylio"
   tags = {
     Environment = local.workspace["environment"]
     Provisioner = "terraform"
@@ -10,18 +11,12 @@ locals {
     default = {}
 
     dev = {
-      environment                      = "dev"
-      cidr                             = "10.0.0.0/16"
-      subnet_public_cidr               = "10.0.1.0/24"
-      subnet_public_availability_zone  = ["eu-west-3a", ]
-      private_subnet_availability_zone = ["eu-west-3a", "eu-west-3b"]
-      private_subnet_cidr = { 
-        "1" = {
-        cidr_block = "10.0.2.0/24"
-        }
-        "2" = {
-          cidr_block = "10.0.3.0/24"
-      } }
+      environment                         = "dev"
+      cidr                                = "10.0.0.0/16"
+      subnet_public_cidr                  = "10.0.1.0/24"
+      subnet_public_availability_zone     = ["eu-west-3a", ]
+      private_subnet_availability_zone    = ["eu-west-3a", "eu-west-3b"]
+      private_subnet_cidr                 = ["10.0.2.0/24", "10.0.3.0/24"]
       ecs_instance_ami                    = "ami-0d1ff537c292bb272"
       ecs_instance_instance_type          = "t2.micro"
       container_definitions_name          = "nginx"
@@ -38,6 +33,41 @@ locals {
       db_username                         = "admin"
       db_name                             = "myapp"
       ecs_instance_role                   = "ecs_user_role"
+      ecs_instance_sg_egress = [
+        {
+          from_port   = 0
+          to_port     = 0
+          protocol    = "-1"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
+      ]
+      ecs_instance_sg_ingress = [
+        {
+          from_port   = 3306
+          to_port     = 3306
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        },
+        {
+          from_port   = 80
+          to_port     = 80
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        },
+        {
+          from_port   = 443
+          to_port     = 443
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        },
+
+        {
+          from_port   = 22
+          to_port     = 22
+          protocol    = "tcp"
+          cidr_blocks = ["0.0.0.0/0"]
+        }
+      ]
     }
   }
   environment_vars = contains(keys(local.env), terraform.workspace) ? terraform.workspace : "default"

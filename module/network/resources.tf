@@ -16,12 +16,19 @@ resource "aws_subnet" "public" {
 }
 
 resource "aws_subnet" "private" {
-  for_each          = var.private_subnet_cidr
+  for_each = { for idx, cidr in var.private_subnet_cidr : 
+    idx => {
+      cidr = cidr
+      az   = var.private_subnet_availability_zone[idx]
+    }
+  }
+
   vpc_id            = aws_vpc.main.id
-  cidr_block        = each.value.cidr_block
-  availability_zone = var.private_subnet_availability_zone[tonumber(each.key) - 1]
+  cidr_block        = each.value.cidr
+  availability_zone = each.value.az
+
   tags = merge(var.tags, {
-    Name = "${var.private_subnet_name}-${each.key}"
+    Name = "${var.private_subnet_name}-${each.key + 1}"
   })
 }
 
