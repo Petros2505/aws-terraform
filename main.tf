@@ -1,6 +1,7 @@
+data "aws_caller_identity" "current" {}
+
 module "vpc" {
   source = "./module/network"
-
   tags                             = "${local.tags}"
   vpc_name                         = "${local.workspace.environment}-${local.project_name}-vpc"
   vpc_cdr                          = "${local.workspace.cidr}"

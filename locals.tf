@@ -1,4 +1,5 @@
 locals {
+  expected_account_id = data.aws_caller_identity.current.account_id
   region       = "eu-west-3"
   project_name = "zylio"
   tags = {
